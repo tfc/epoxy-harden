@@ -1,20 +1,17 @@
 { sources ? import ./nix/sources.nix
-, haskell-nix ? import sources.haskell-nix {}
-, nixpkgs ? haskell-nix.sources.nixpkgs
-, pkgs ? import nixpkgs haskell-nix.nixpkgsArgs
+, nixpkgs ? sources.nixpkgs
+, pkgs ? import nixpkgs { overlays = [ (import ./nix/overlay.nix) ]; }
 }:
-let
-  release =
-    import ./nix/release.nix { inherit sources haskell-nix nixpkgs pkgs; };
-in
-release.epoxyHarden.shellFor {
-  packages = ps: [ ps.epoxy-harden ];
 
-  tools = { cabal = "3.2.0.0"; hlint = "3.1.6"; };
-
-  buildInputs = [
-    # Build Tools (required for development)
-    pkgs.niv
-    pkgs.stack
+pkgs.haskellPackages.shellFor {
+  packages = p: [ (import ./. { }) ];
+  buildInputs = with pkgs; [
+    cabal-install
+    ghcid
+    hlint
   ];
+
+  # run `hoogle server --local` to get a local hoogle search engine
+  # and full hackage docset for browsing
+  withHoogle = true;
 }

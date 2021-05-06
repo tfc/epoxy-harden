@@ -19,8 +19,9 @@ Using the Haskell [Stack](https://haskellstack.org/), you can build
 this program and execute its tests via:
 
 ```sh
-% stack build
-% stack test
+% nix-shell
+% cabal build
+% cabal test
 ```
 
 ## Building using Nix
@@ -29,7 +30,7 @@ If you don't plan to do any development, the most convenient way to
 build is to use [Nix](https://nixos.org/nix/):
 
 ```sh
-% nix build -f . epoxyHarden
+% nix-build
 ```
 
 To speed up build times, you can use my [Cachix](https://cachix.org)
@@ -75,17 +76,3 @@ statically generated.
 
 The tool will combine all of these inputs into a ready to run ELF
 binary, that we'll call the _target boot image_.
-
-## Developing
-
-This section contains information related to actually hacking on the code.
-
-### Updating Dependencies
-
-To update the [Stackage](https://www.stackage.org/) snapshot we build
-against, update the resolver in `stack.yaml`. Then execute:
-
-```sh
-% niv update
-% stack-to-nix --output . --stack-yaml stack.yaml
-```

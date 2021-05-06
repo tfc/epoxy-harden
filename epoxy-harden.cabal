@@ -92,5 +92,4 @@ test-suite epoxy-harden-test
                     , hspec
                     , quickcheck-instances
   default-language:   Haskell2010
-  build-tool-depends: hspec-discover:hspec-discover
   ghc-options:        -fwarn-unused-imports
